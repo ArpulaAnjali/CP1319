@@ -1,0 +1,57 @@
+import java.util.*;
+
+public class Main {
+
+    // Divide and Conquer function
+    static long maxSubArray(int[] arr, int left, int right) {
+        // Base case: single element
+        if (left == right) {
+            return arr[left];
+        }
+
+        int mid = (left + right) / 2;
+
+        // Left and right maximum subarrays
+        long leftMax = maxSubArray(arr, left, mid);
+        long rightMax = maxSubArray(arr, mid + 1, right);
+
+        // Crossing sum
+        long leftSum = Long.MIN_VALUE;
+        long sum = 0;
+        for (int i = mid; i >= left; i--) {
+            sum += arr[i];
+            leftSum = Math.max(leftSum, sum);
+        }
+
+        long rightSum = Long.MIN_VALUE;
+        sum = 0;
+        for (int i = mid + 1; i <= right; i++) {
+            sum += arr[i];
+            rightSum = Math.max(rightSum, sum);
+        }
+
+        long crossMax = leftSum + rightSum;
+
+        // Return maximum of three
+        return Math.max(Math.max(leftMax, rightMax), crossMax);
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int T = sc.nextInt();
+
+        while (T-- > 0) {
+            int N = sc.nextInt();
+            int[] arr = new int[N];
+
+            for (int i = 0; i < N; i++) {
+                arr[i] = sc.nextInt();
+            }
+
+            long result = maxSubArray(arr, 0, N - 1);
+            System.out.println(result);
+        }
+        sc.close();
+    }
+}
